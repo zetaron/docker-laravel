@@ -3,6 +3,6 @@ MAINTAINER Fabian Stegemann <fabian.stegemann@gmx.net>
 
 WORKDIR /app
 
-ENTRYPOINT ['php', 'artisan']
+ENTRYPOINT ["php", "artisan"]
 
-CMD ['--help']
+CMD ["--help"]

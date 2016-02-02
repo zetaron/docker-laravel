@@ -1,8 +1,8 @@
 #!/bin/bash
 
-upstream=<<EOF
+read -d '' upstream << EOF
 upstream fpm {
-  server ${FPM_PORT_9000_TCP_ADDR}:9000
+  server ${FPM_PORT_9000_TCP_ADDR}:${FPM_PORT_9000_TCP_PORT};
 }
 EOF
 
