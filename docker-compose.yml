@@ -1,0 +1,39 @@
+mysql:
+  image: mysql:5.7
+  environment:
+    - MYSQL_ROOT_PASSWORD=secret
+    - MYSQL_USER=homestead
+    - MYSQL_PASSOWRD=secret
+    - MYSQL_DATABASE=homestead
+redis:
+  image: redis:3.0
+fpm:
+  image: zetaron/laravel-php
+  volumes:
+    - ./app:/var/www/html
+  links:
+    - mysql
+    - redis
+  environment:
+    - DB_HOST=mysql
+    - REDIS_HOST=redis
+web:
+  image: zetaron/laravwl-web
+  volumes:
+    - ./app/public:/var/www/html/public:ro
+  links:
+    - fpm
+  environment:
+    - DNSDOCK_ALIAS=laravel.docker
+composer:
+  image: composer/composer
+  volumes:
+    - ./app:/app
+  command: install
+artisan:
+  image: zetaron/laravel-artisan
+  volumes:
+    - ./app:/app
+  links:
+    - composer
+  command: migrate
