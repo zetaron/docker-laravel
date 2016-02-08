@@ -1,39 +1,42 @@
+dnsdock:
+  image: simonqbs/dnsdock
+  container_name: dnsdock
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+  ports:
+    - 172.17.42.1:53:53/udp
+  command: -nameserver="8.8.8.8:53" -dns=":53"
 mysql:
   image: mysql:5.7
-  environment:
-    - MYSQL_ROOT_PASSWORD=secret
-    - MYSQL_USER=homestead
-    - MYSQL_PASSOWRD=secret
-    - MYSQL_DATABASE=homestead
+  env_file:
+    - ./environment.env
+  volumes:
+    - ./storage/mysql:/var/lib/mysql
 redis:
   image: redis:3.0
+  volumes:
+    - ./storage/redis:/data
 fpm:
   image: zetaron/laravel-php
   volumes:
-    - ./app:/var/www/html
+    - ./api:/var/www/html
   links:
     - mysql
     - redis
-  environment:
-    - DB_HOST=mysql
-    - REDIS_HOST=redis
+  env_file:
+    - ./environment.env
 web:
-  image: zetaron/laravwl-web
+  image: zetaron/laravel-web
   volumes:
-    - ./app/public:/var/www/html/public:ro
+    - ./api:/var/www/html:ro
   links:
     - fpm
-  environment:
-    - DNSDOCK_ALIAS=laravel.docker
+  env_file:
+    - ./environment.env
 composer:
   image: composer/composer
   volumes:
-    - ./app:/app
+    - ./api:/app
+  env_file:
+    - ./environment.env
   command: install
-artisan:
-  image: zetaron/laravel-artisan
-  volumes:
-    - ./app:/app
-  links:
-    - composer
-  command: migrate
