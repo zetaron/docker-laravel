@@ -4,6 +4,8 @@ WORKDIR /var/www/html
 EXPOSE 9000
 CMD ["php-fpm"]
 
+ADD php-fpm.conf /usr/local/etc/php-fpm.conf
+
 RUN curl -o /usr/bin/docker-php-pecl-install -L https://raw.githubusercontent.com/helderco/docker-php/master/template/bin/docker-php-pecl-install \
     && chmod +x /usr/bin/docker-php-pecl-install
 
