@@ -2,8 +2,9 @@ FROM php:7-fpm
 
 WORKDIR /var/www/html
 EXPOSE 9000
-CMD ["php-fpm"]
+CMD ["/usr/bin/start-php-fpm"]
 
+ADD start-php-fpm.sh /usr/bin/start-php-fpm
 ADD php-fpm.conf /usr/local/etc/php-fpm.conf
 
 RUN curl -o /usr/bin/docker-php-pecl-install -L https://raw.githubusercontent.com/helderco/docker-php/master/template/bin/docker-php-pecl-install \
